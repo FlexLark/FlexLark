@@ -1,0 +1,8 @@
+{
+  "Back": "上一曲",
+  "Play": "播放",
+  "Pause": "暂停",
+  "Next": "下一曲",
+  "Empty Playlist": "空播放列表",
+  "Volume {{value}}%": "音量 {{value}}%"
+}
