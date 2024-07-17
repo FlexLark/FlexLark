@@ -28,7 +28,7 @@ export default function Player () {
   }
 
   return (
-    <div className="lr-player container mx-auto flex items-center p-4 w-full h-20">
+    <div className="lr-player container mx-auto flex items-center p-4 w-full h-full">
       <div className="join p-2">
         <button className="btn join-item lg:tooltip" title={ t("Back") }>
           <GoStart theme="outline" size="24" fill="#333"/>
