@@ -12,13 +12,15 @@ function App() {
       <div className="w-full flex flex-1" style={{
         height: "calc(100vh - 5rem)"
       }}>
-        <aside className="w-64 h-full lg:w-80 bg-slate-100">
-          <ul className="menu rounded-box w-full">
-            <li className="menu-title">{ t("Library") }</li>
+        <aside className="w-64 h-full lg:w-80 bg-slate-100 flex-none">
+          <ul className="menu rounded-box w-full truncate">
+            <li className="menu-title truncate select-none">{ t("Library") }</li>
             <li><a>{ t("Local") }</a></li>
             <li><a>{ t("Podcast") }</a></li>
-            <li><a>{ t("Radio Station") }</a></li>
-            <li className="menu-title">{t("List ({{number}})", {number: 3}) }</li>
+            <li><a>{t("Radio Station")}</a></li>
+            <li><a>网易云音乐</a></li>
+            <li><a>QQ音乐</a></li>
+            <li className="menu-title truncate select-none">{t("List ({{number}})", {number: 3}) }</li>
             <li><a>我最喜欢</a></li>
             <li><a>每日推荐</a></li>
             <li><a>当春风吹进民谣里【欧美篇】</a></li>
@@ -38,14 +40,14 @@ function App() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th>1</th>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Littel, Schaden and Vandervort</td>
-                <td>Canada</td>
-                <td>12/16/2020</td>
-                <td>Blue</td>
+              <tr className="select-none cursor-pointer">
+                <th className="truncate">1</th>
+                <td className="truncate">Cy Ganderton</td>
+                <td className="truncate">Quality Control Specialist</td>
+                <td className="truncate">Littel, Schaden and Vandervort</td>
+                <td className="truncate">Canada</td>
+                <td className="truncate">12/16/2020</td>
+                <td className="truncate">Blue</td>
               </tr>
               <tr>
                 <th>2</th>
