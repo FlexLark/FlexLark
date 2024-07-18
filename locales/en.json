@@ -1,5 +1,5 @@
 {
-  "Player control":"",
+  "Player control": "",
   "Back": "Back",
   "Play": "Play",
   "Pause": "Pause",
@@ -7,5 +7,6 @@
   "Empty Playlist": "Empty Playlist",
   "Volume {{value}}%": "Volume {{value}}%",
   "Library": "Library",
-  "List ({{number}})": "List ({{number}})"
+  "List ({{number}})": "List ({{number}})",
+  "Playlist.Play": "Play"
 }

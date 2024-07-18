@@ -35,12 +35,12 @@ export default function Player () {
         </button>
         { playStatus === PlayStatus.Play &&
           <button className="btn join-item lg:tooltip" title={t("Pause")} onClick={onpause}>
-            <Pause theme="outline" size="24" fill="#333"/>
+            <Pause theme="filled" size="24" fill="#333"/>
           </button>
         }
         {playStatus === PlayStatus.Pause &&
           <button className="btn join-item lg:tooltip" title={t("Play")} onClick={onplay}>
-            <PlayOne theme="outline" size="24" fill="#333"/>
+            <PlayOne theme="filled" size="24" fill="#333"/>
           </button>
         }
         <button className="btn join-item lg:tooltip" title={ t("Next") }>
