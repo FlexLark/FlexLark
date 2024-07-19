@@ -1,6 +1,6 @@
 import { PlayOne, Star } from "@icon-park/react";
 import "../../../i18n";
-import React from "react";
+// import React from "react";
 import { useTranslation } from "react-i18next";
 export default function Playlist() {
   const { t } = useTranslation();
@@ -32,7 +32,7 @@ Naturally, Slim isn’t about to go out quietly. Ever the eager pugilist, he exp
         </div>
       </div>
     </div>
-    <ul className="lr-playlist-list container mx-auto my-4 flex flex-col">
+    <ul className="lr-playlist-list container px-4 mx-auto my-4 flex flex-col">
       {
         Array.from({ length: 20 }, i => i).map((_, i) => {
           return (<li className="flex items-center hover:bg-slate-200 rounded-lg px-6 py-3 cursor-pointer">

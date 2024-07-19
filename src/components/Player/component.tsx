@@ -1,21 +1,61 @@
 import "../../../i18n";
+import {Howl, Howler} from 'howler';
 import { GoStart, PlayOne, GoEnd, Pause, PlayOnce, PlayCycle, ShuffleOne } from "@icon-park/react";
-import React, { useState } from "react";
+import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LoopMode, PlayStatus } from "./types";
 import { formatSecond } from "./tools";
 
-export default function Player () {
+interface AudioType { 
+  name: string,
+  duration: number,
+  cover?: string,
+  path: string,
+}
+interface propsType {
+  playlist: AudioType[],
+  status: PlayStatus
+}
+
+export default function Player(props: propsType) {
   const { t } = useTranslation();
   const [playStatus, setPlayStatus] = useState(PlayStatus.Pause);
   const [loopMode, setLoopMode] = useState(LoopMode.ListLoop);
-  const [progress, setProgress] = useState(0); 
+  const [progress, setProgress] = useState(0);
+  const [playlist, setPlaylist] = useState(props.playlist);
+
+  const [playIndex, setPlayIndex] = useState(0);
 
   const onpause = () => {
     setPlayStatus(PlayStatus.Pause);
   }
   const onplay = () => {
     setPlayStatus(PlayStatus.Play);
+  }
+  const onnext = () => {
+    let isPlaying;
+    if (playStatus === PlayStatus.Play) {
+      isPlaying = true;
+      onpause();
+    }
+    
+    if (playIndex + 1 > playlist.length) {
+      setPlayIndex(0);
+      return;
+    }
+    setPlayIndex(playIndex + 1);
+    if (isPlaying) {
+      onplay();
+    }
+  }
+  const onback = () => {
+    onpause();
+    if (playIndex - 1 < 0) {
+      setPlayIndex(playlist.length - 1);
+      return;
+    }
+    setPlayIndex(playIndex - 1);
+    onplay();
   }
   const changeLoopModeOneLoop = () => {
     setLoopMode(LoopMode.OneLoop);
@@ -27,10 +67,14 @@ export default function Player () {
     setLoopMode(LoopMode.ShuffleLoop);
   }
 
+  function formatFileName(fileName: HTMLAudioElement): ReactNode | Iterable<ReactNode> {
+    return 
+  }
+
   return (
     <div className="lr-player container mx-auto flex items-center p-4 w-full h-full">
       <div className="join p-2">
-        <button className="btn join-item lg:tooltip" title={ t("Back") }>
+        <button className="btn join-item lg:tooltip" title={ t("Back") } onClick={onback}>
           <GoStart theme="outline" size="24" fill="#333"/>
         </button>
         { playStatus === PlayStatus.Play &&
@@ -43,7 +87,7 @@ export default function Player () {
             <PlayOne theme="filled" size="24" fill="#333"/>
           </button>
         }
-        <button className="btn join-item lg:tooltip" title={ t("Next") }>
+        <button className="btn join-item lg:tooltip" title={ t("Next") } onClick={onnext}>
           <GoEnd theme="outline" size="24" fill="#333"/>
         </button>
       </div>
@@ -76,14 +120,16 @@ export default function Player () {
         </div>
       </div>
       <div className="join p-2">
-        <h2 className="text-xl text font-bold leading-20 underline-offset-2 hover:underline">
+        <h2 className="text-xl text w-48 truncate font-bold leading-20 underline-offset-2 hover:underline">
           {
-            t("Empty Playlist")
+            playlist.length < 0 ?
+              t("Empty Playlist") :
+              playlist[playIndex].name
           }
         </h2>
       </div>
       <div className="join p-2 flex-1 flex items-center">
-        <input type="range" min="0" max="0" value={ progress } className="range range-xs mr-2" onChange={(e) => setProgress(Number(e.target.value)) } />
+        <input type="range" min="0" max={ playlist[playIndex].duration } value={ progress } className="range range-xs mr-2" onChange={(e) => setProgress(Number(e.target.value)) } />
         <span>{ formatSecond(progress) }</span>
       </div>
       {/* <div className="join p-2">
