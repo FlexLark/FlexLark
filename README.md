@@ -1,7 +1,4 @@
-# Tauri + React + Typescript
+# Lark
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
-
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+> 这是一个使用 React+Taurl 开发的跨平台本地音频播放器，支持通过插件的方式播放网络资源。
+> 现在处于项目早期开发阶段预计8月退出第一个版本。

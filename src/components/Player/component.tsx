@@ -1,12 +1,12 @@
 import "../../../i18n";
 import {Howl, Howler} from 'howler';
 import { GoStart, PlayOne, GoEnd, Pause, PlayOnce, PlayCycle, ShuffleOne } from "@icon-park/react";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LoopMode, PlayStatus } from "./types";
 import { formatSecond } from "./tools";
 
-interface AudioType { 
+export interface AudioType { 
   name: string,
   duration: number,
   cover?: string,
@@ -23,33 +23,53 @@ export default function Player(props: propsType) {
   const [loopMode, setLoopMode] = useState(LoopMode.ListLoop);
   const [progress, setProgress] = useState(0);
   const [playlist, setPlaylist] = useState(props.playlist);
-
   const [playIndex, setPlayIndex] = useState(0);
+  console.log('加载')
+  let backSong = new Howl({
+    src: [playlist[playIndex === 0?playlist.length - 1:playIndex - 1].path]
+  });
+  let newSong = new Howl({
+    src: [playlist[playIndex].path]
+  });
+  let nextSong = new Howl({
+    src: [playlist[playIndex + 1 < playlist.length ? playIndex + 1 : 0].path]
+  })
+
 
   const onpause = () => {
     setPlayStatus(PlayStatus.Pause);
+    newSong.pause();
   }
   const onplay = () => {
     setPlayStatus(PlayStatus.Play);
+    newSong.play();
   }
   const onnext = () => {
-    let isPlaying;
-    if (playStatus === PlayStatus.Play) {
-      isPlaying = true;
-      onpause();
-    }
-    
-    if (playIndex + 1 > playlist.length) {
+    newSong.stop();
+    if (playIndex + 1 >= playlist.length) {
       setPlayIndex(0);
-      return;
+    } else {
+      setPlayIndex(playIndex + 1);
     }
-    setPlayIndex(playIndex + 1);
-    if (isPlaying) {
-      onplay();
+    backSong = newSong
+    newSong = nextSong
+    if (playIndex + 1 >= playlist.length) {
+      nextSong = new Howl({
+        src: [playlist[playIndex + 1].path]
+      })
+    } else {
+      nextSong = new Howl({
+        src: [playlist[0].path]
+      })
+    }
+    if (playStatus === PlayStatus.Play) {
+      nextSong.play();
     }
   }
   const onback = () => {
-    onpause();
+    newSong.stop();
+    backSong.play();
+
     if (playIndex - 1 < 0) {
       setPlayIndex(playlist.length - 1);
       return;
@@ -66,7 +86,9 @@ export default function Player(props: propsType) {
   const changeLoopModeShuffleLoop = () => {
     setLoopMode(LoopMode.ShuffleLoop);
   }
+  useEffect(() => {
 
+  }, [newSong])
   function formatFileName(fileName: HTMLAudioElement): ReactNode | Iterable<ReactNode> {
     return 
   }
