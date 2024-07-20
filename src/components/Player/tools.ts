@@ -6,7 +6,7 @@ export function formatSecond(second: number): string {
 
   const hours = Math.floor(second / 3600);
   const minutes = Math.floor((second % 3600) / 60);
-  const remainingSeconds = second % 60;
+  const remainingSeconds = Math.floor(second % 60);
 
   if (hours === 0) {  
     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;  

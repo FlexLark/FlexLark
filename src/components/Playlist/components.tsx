@@ -2,7 +2,16 @@ import { PlayOne, Star } from "@icon-park/react";
 import "../../../i18n";
 // import React from "react";
 import { useTranslation } from "react-i18next";
-export default function Playlist() {
+import { AudioType } from "../Player/component";
+
+interface propsType {
+  playlist: AudioType[],
+  onClick?: (index: number) => void,
+  onPlay?: (playlist: AudioType[]) => void
+}
+
+export default function Playlist(props: propsType) {
+  const { playlist, onClick, onPlay } = props;
   const { t } = useTranslation();
 
   return (<div className="lr-playlist bg-base-100">
@@ -22,7 +31,7 @@ If this does end up the genuine final curtain call for Eminem’s most notorious
 
 Naturally, Slim isn’t about to go out quietly. Ever the eager pugilist, he exploits his upper hand with Fight Club panache on “Brand New Dance” and “Trouble.” The character’s antagonism vacillates between self-destructive outbursts and strategic gaslighting, gleefully poking at touchy topics on “Houdini” and assigning we’re-in-this-together complicity to Marshall on the surprise sequel “Guilty Conscience 2.” Yet even as the tragicomically intertwined foes grapple with one another, the album still makes room for something as personal as “Temporary,” a heartfelt message to his daughter for after he’s gone. With the added benefit of a few unexpected cameos, including Michigan-repping cut “Tobey” with Big Sean and BabyTron, the over-the-top theatricality driving The Death of… feels like fan service, giving his longtime patrons the Eminem show they’ve come to expect from him.</div>
         <div className="flex">
-          <button className="btn mr-4">
+          <button className="btn mr-4" onClick={ () => onPlay(playlist) }>
             <PlayOne theme="filled" size="24" fill="#333"/>
             {t("Playlist.Play")}
           </button>
@@ -34,14 +43,14 @@ Naturally, Slim isn’t about to go out quietly. Ever the eager pugilist, he exp
     </div>
     <ul className="lr-playlist-list container px-4 mx-auto my-4 flex flex-col">
       {
-        Array.from({ length: 20 }, i => i).map((_, i) => {
-          return (<li className="flex items-center hover:bg-slate-200 rounded-lg px-6 py-3 cursor-pointer">
+        playlist.map(({ name }, i) => {
+          return (<li className="flex items-center hover:bg-slate-200 rounded-lg px-6 py-3 cursor-pointer" onClick={() => onClick(i)}>
             <div className="flex-none mr-2 text-neutral w-8">
               { i + 1 }
             </div>
             <div className="flex-1 pt-1">
               <div className="flex">
-                <div className="text-xl text-accent-content font-bold mr-2">网易云音乐</div>
+                <div className="text-xl text-accent-content font-bold mr-2">{ name }</div>
                 <div className="text-neutral">(网易云)</div>
               </div>
               <div className="text-neutral text-sm">
