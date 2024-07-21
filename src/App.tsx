@@ -2,7 +2,8 @@ import "./App.css";
 import "../i18n";
 // import React from "react";
 // import { useTranslation } from "react-i18next";
-import Player, { AudioType } from "./components/Player/component";
+import Player from "./components/Player/component";
+import { Audio } from "./types/Audio";
 import Aside from "./components/Aside/components";
 // import Table from "./components/Table/component";
 import Playlist from "./components/Playlist/components";
@@ -13,7 +14,7 @@ function App() {
   // const { t } = useTranslation();
   const [index, setIndex] = useState(0);
   const [playStatus, setPlayStatus] = useState(PlayStatus.Pause);
-  const [playlist, setPlaylist] = useState<AudioType[]>([
+  const [playlist, setPlaylist] = useState<Audio[]>([
     {
       name: '光阴的故事',
       author: ['罗大佑'],
@@ -55,7 +56,7 @@ function App() {
     setIndex(index);
     setPlayStatus(PlayStatus.Play);
   }
-  const onChangeList = (playlist: AudioType[]) => {
+  const onChangeList = (playlist: Audio[]) => {
     setPlaylist(playlist);
     setPlayStatus(PlayStatus.Play);
   }

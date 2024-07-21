@@ -2,12 +2,12 @@ import { PlayOne, Star } from "@icon-park/react";
 import "../../../i18n";
 // import React from "react";
 import { useTranslation } from "react-i18next";
-import { AudioType } from "../Player/component";
+import { Audio } from "../../types/Audio";
 
 interface propsType {
-  playlist: AudioType[],
+  playlist: Audio[],
   onClick?: (index: number) => void,
-  onPlay?: (playlist: AudioType[]) => void
+  onPlay?: (playlist: Audio[]) => void
 }
 
 export default function Playlist(props: propsType) {

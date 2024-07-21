@@ -5,16 +5,10 @@ import { ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LoopMode, PlayStatus } from "./types";
 import { formatSecond } from "./tools";
+import { Audio } from "../../types/Audio";
 
-export interface AudioType { 
-  name: string,
-  path: string,
-  duration?: number,
-  cover?: string,
-  author?: string[]
-}
 interface propsType {
-  playlist: AudioType[],
+  playlist: Audio[],
   status: PlayStatus,
   index: number
 }
@@ -214,7 +208,7 @@ export default function Player(props: propsType) {
     </div>)
 }
 
-function shuffleList(playlist: AudioType[]): import("react").SetStateAction<AudioType[]> {
+function shuffleList(playlist: Audio[]): import("react").SetStateAction<Audio[]> {
   for (let i = playlist.length - 1; i > 0; i--) {  
       const j = Math.floor(Math.random() * (i + 1));  
       [playlist[i], playlist[j]] = [playlist[j], playlist[i]]; // 数组解构赋值  
