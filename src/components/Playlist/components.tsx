@@ -14,7 +14,7 @@ export default function Playlist(props: propsType) {
   const { playlist, onClick, onPlay } = props;
   const { t } = useTranslation();
 
-  return (<div className="lr-playlist bg-base-100">
+  return (<div className="lr-playlist h-full bg-base-100 overflow-y-auto">
     <div className="lr-playlist-header p-12 flex sticky top-0 bg-base-100">
       <div className="lr-playlist-cover avatar w-72 h-72 flex-none shrink-0 mr-12">
         <div className="w-72 rounded-xl">
@@ -43,7 +43,7 @@ Naturally, Slim isn’t about to go out quietly. Ever the eager pugilist, he exp
     </div>
     <ul className="lr-playlist-list container px-4 mx-auto my-4 flex flex-col">
       {
-        playlist.map(({ name }, i) => {
+        playlist.map(({ name,author }, i) => {
           return (<li className="flex items-center hover:bg-slate-200 rounded-lg px-6 py-3 cursor-pointer" onClick={() => onClick(i)}>
             <div className="flex-none mr-2 text-neutral w-8">
               { i + 1 }
@@ -54,7 +54,7 @@ Naturally, Slim isn’t about to go out quietly. Ever the eager pugilist, he exp
                 <div className="text-neutral">(网易云)</div>
               </div>
               <div className="text-neutral text-sm">
-                丁磊
+                {author} 
               </div>
             </div>
             <div className="flex-none text-neutral">3:22</div>

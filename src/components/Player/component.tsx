@@ -8,14 +8,15 @@ import { formatSecond } from "./tools";
 
 export interface AudioType { 
   name: string,
+  path: string,
   duration?: number,
   cover?: string,
-  path: string,
+  author?: string[]
 }
 interface propsType {
   playlist: AudioType[],
-  status?: PlayStatus,
-  index?: number
+  status: PlayStatus,
+  index: number
 }
 
 const HowlConfig = (path: string) => {
@@ -65,7 +66,8 @@ export default function Player(props: propsType) {
 
   const changeLoopModeOneLoop = () => {
     setLoopMode(LoopMode.OneLoop);
-    setPlayingPlaylist([playingPlaylist[playIndex]]);
+    const newPlaylist = [playingPlaylist[playIndex]];
+    setPlayingPlaylist(newPlaylist);
     setPlayIndex(0);
   }
   const changeLoopModeListLoop = () => {
@@ -74,16 +76,18 @@ export default function Player(props: propsType) {
   }
   const changeLoopModeShuffleLoop = () => {
     setLoopMode(LoopMode.ShuffleLoop);
-    setPlayingPlaylist(shuffleList(playlist));
+    const newPlaylist = shuffleList(playlist)
+    setPlayingPlaylist(newPlaylist);
   }
 
   useEffect(() => {
+    setLoading(true);
     newSong.unload();
     setNewSong(new Howl(HowlConfig(playingPlaylist[playIndex]?.path)));
   }, [playIndex]);
   
   useEffect(() => {
-    setLoading(true);
+    
     setProgress(0);
     newSong.on('load', () => setLoading(false));
     newSong.on('end', () => onnext());
@@ -91,6 +95,7 @@ export default function Player(props: propsType) {
       newSong.play(); 
     }
   }, [newSong])
+
   useEffect(() => { 
     if (playStatus === PlayStatus.Play) {
       setPlayTimer(setInterval(() => {
@@ -106,6 +111,23 @@ export default function Player(props: propsType) {
     }
   }, [playStatus])
 
+  useEffect(() => {  
+    // 当 playlist 变化时  
+    setPlaylist(props.playlist);  
+    setPlayingPlaylist(props.playlist);  
+  }, [props.playlist]);  
+    
+  useEffect(() => {  
+    // 当 index 变化时  
+    setPlayIndex(index);  
+  }, [index]);  
+    
+  useEffect(() => {  
+    // 当 status 变化时  
+    setTimeout(() => {
+      setPlayStatus(status);  
+    }, 200);
+  }, [status]);
   return (
     <div className="lr-player container mx-auto flex items-center p-4 w-full h-full">
       <div className="join p-2">
