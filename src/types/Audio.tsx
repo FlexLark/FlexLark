@@ -1,7 +1,7 @@
 export interface Audio {
   name: string;
   path: string;
-  duration?: number;
+  duration: number;
   cover?: string;
   author?: string | string[];  
   category?: string;

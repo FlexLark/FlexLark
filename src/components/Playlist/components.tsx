@@ -45,7 +45,11 @@ Naturally, Slim isn’t about to go out quietly. Ever the eager pugilist, he exp
     <ul className="lr-playlist-list container px-4 mx-auto my-4 flex flex-col">
       {
         playlist.map(({ name, duration, cover, author }, i) => {
-          return (<li className="flex items-center hover:bg-slate-200 rounded-lg px-6 py-3 cursor-pointer" onClick={() => onClick(i)}>
+          return (<li
+            key={name}
+            className="flex items-center hover:bg-slate-200 rounded-lg px-6 py-3 cursor-pointer"
+            onClick={() => onClick(i)}
+          >
             <div className="flex-none mr-2 text-neutral w-8">
               { i + 1 }
             </div>

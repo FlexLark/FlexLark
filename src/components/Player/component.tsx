@@ -30,7 +30,9 @@ export default function Player(props: propsType) {
   const [playingPlaylist, setPlayingPlaylist] = useState(playlist);
   const [playIndex, setPlayIndex] = useState(index || 0);
 
-  let [newSong, setNewSong] = useState(new Howl(HowlConfig(playingPlaylist[playIndex]?.path)));
+  let [newSong, setNewSong] = useState(
+    playingPlaylist.length === 0 ? null : new Howl(HowlConfig(playingPlaylist[playIndex]?.path))
+  );
   const [playerTimer, setPlayTimer] = useState(0);
 
   const onpause = () => {
@@ -54,6 +56,7 @@ export default function Player(props: propsType) {
     setPlayIndex(playIndex - 1);
   }
   const onprogress = (e) => {
+    if (!newSong) return
     newSong.seek(e?.target.value);
     setProgress(e?.target.value);
   }
@@ -75,14 +78,15 @@ export default function Player(props: propsType) {
   }
 
   useEffect(() => {
+    if (!newSong) return
     setLoading(true);
     newSong.unload();
     setNewSong(new Howl(HowlConfig(playingPlaylist[playIndex]?.path)));
   }, [playIndex]);
   
   useEffect(() => {
-    
     setProgress(0);
+    if (!newSong) return
     newSong.on('load', () => setLoading(false));
     newSong.on('end', () => onnext());
     if (playStatus === PlayStatus.Play) {
@@ -93,14 +97,20 @@ export default function Player(props: propsType) {
   useEffect(() => { 
     if (playStatus === PlayStatus.Play) {
       setPlayTimer(setInterval(() => {
+        if (!newSong) {
+          setProgress(0);
+          return;
+        }
         setProgress(newSong.seek());
       }, 1000));
     } else {
       clearInterval(playerTimer);
     }
     if (playStatus === PlayStatus.Pause) {
+      if (!newSong) return
       newSong.pause();
     } else if (playStatus === PlayStatus.Play) {
+      if (!newSong) return
       newSong.play();
     }
   }, [playStatus])
@@ -183,7 +193,7 @@ export default function Player(props: propsType) {
       <div className="join p-2">
         <h2 className="text-xl text max-w-48 truncate font-bold leading-20 underline-offset-2 hover:underline">
           {
-            playingPlaylist.length < 0 ?
+            playingPlaylist.length === 0 ?
               t("Empty Playlist") :
               playingPlaylist[playIndex].name
           }
@@ -193,12 +203,22 @@ export default function Player(props: propsType) {
         <input
           type="range"
           min="0"
-          max={playingPlaylist[playIndex].duration || newSong.duration()}
+          max={
+            playingPlaylist.length === 0 ? 0 :
+            playingPlaylist[playIndex].duration
+          }
           value={progress}
           className="range range-xs mr-4"
           onChange={onprogress}
         />
-        <span className="flex-none">{ formatSecond(progress) } / { formatSecond(playingPlaylist[playIndex].duration || newSong.duration()) }</span>
+        <span className="flex-none">
+          {formatSecond(progress)}
+          /
+          {formatSecond(
+            playingPlaylist.length === 0 ? 0 :
+            playingPlaylist[playIndex].duration
+          )}
+        </span>
       </div>
       {/* <div className="join p-2">
         <button className="btn btn-ghost btn-sm pop-btn" title={t("Volume {{value}}%", {value: 60}) }>
