@@ -1,8 +1,9 @@
-import { PlayOne, Star } from "@icon-park/react";
+import { Acoustic, PlayOne, Star } from "@icon-park/react";
 import "../../../i18n";
 // import React from "react";
 import { useTranslation } from "react-i18next";
 import { Audio } from "../../types/Audio";
+import { formatSecond } from "../Player/tools";
 
 interface propsType {
   playlist: Audio[],
@@ -43,21 +44,35 @@ Naturally, Slim isn’t about to go out quietly. Ever the eager pugilist, he exp
     </div>
     <ul className="lr-playlist-list container px-4 mx-auto my-4 flex flex-col">
       {
-        playlist.map(({ name,author }, i) => {
+        playlist.map(({ name, duration, cover, author }, i) => {
           return (<li className="flex items-center hover:bg-slate-200 rounded-lg px-6 py-3 cursor-pointer" onClick={() => onClick(i)}>
             <div className="flex-none mr-2 text-neutral w-8">
               { i + 1 }
             </div>
+            {
+              cover &&
+              <div className="w-14 rounded-lg mr-4 overflow-hidden">
+                <img src={cover} />
+              </div>
+            }
+            {
+              !cover &&
+              <div className="w-14 h-14 flex items-center justify-center bg-base-200 rounded-lg mr-4 overflow-hidden">
+                  <Acoustic theme="filled" size="24" fill="#333"/>
+              </div>
+            }
             <div className="flex-1 pt-1">
               <div className="flex">
                 <div className="text-xl text-accent-content font-bold mr-2">{ name }</div>
                 <div className="text-neutral">(网易云)</div>
               </div>
               <div className="text-neutral text-sm">
-                {author} 
+                {
+                  typeof author === 'string' ? author : author?.join(t(", "))
+                }
               </div>
             </div>
-            <div className="flex-none text-neutral">3:22</div>
+            <div className="flex-none text-neutral">{ duration? formatSecond(duration) : t('Unknown') }</div>
           </li>)
         })
       }

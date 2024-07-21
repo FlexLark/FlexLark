@@ -10,5 +10,7 @@
   "List ({{number}})": "播放列表 ({{number}})",
   "Radio Station": "电台",
   "Podcast": "播客",
-  "Playlist.Play": "播 放"
+  "Playlist.Play": "播 放",
+  ", ": "、",
+  "Unknown": "未知"
 }

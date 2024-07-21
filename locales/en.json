@@ -8,5 +8,8 @@
   "Volume {{value}}%": "Volume {{value}}%",
   "Library": "Library",
   "List ({{number}})": "List ({{number}})",
-  "Playlist.Play": "Play"
+  "Playlist.Play": "Play",
+  "Used as a delimiter for multiple singers, etc": "用于多个歌手等之类的分隔符",
+  ", ": ", ",
+  "Unknown": "Unknown"
 }
