@@ -1,7 +1,7 @@
 export enum PlayStatus {
-  Stop,
-  Play,
-  Pause
+  Stop = 'stop',
+  Play = 'play',
+  Pause = 'pause'
 }
 
 export enum LoopMode {

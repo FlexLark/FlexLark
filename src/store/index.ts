@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
-import playlistSlice from './festures/playlistSlice'
+import playStatusSlice from './festures/playStatusSlice'
+
 
 const store = configureStore({
   reducer: {
-    playlist: playlistSlice
+    playStatus: playStatusSlice
   }
 })
 

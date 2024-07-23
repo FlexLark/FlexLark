@@ -1,3 +1,4 @@
+
 import Playlist from "../../components/Playlist/components";
 import { useSelector, useDispatch } from 'react-redux';
 import { replace, setIndex, setStatus } from "../../store/festures/playStatusSlice";
@@ -5,7 +6,7 @@ import { Audio } from "../../types/Audio";
 import { useState } from "react";
 import { PlayStatus } from "../../components/Player/types";
 
-export function ListPage() {
+export function IndexPage() {
   const [playlist, setPlaylist] = useState<Audio[]>([
     {
       name: '光阴的故事',

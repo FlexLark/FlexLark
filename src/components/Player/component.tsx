@@ -15,14 +15,15 @@ interface propsType {
 
 const HowlConfig = (path: string) => {
   return {
-    src: [path]
+    src: [path],
+    html5: true
   }
 }
 
 export default function Player(props: propsType) {
   const { status, index } = props;
   const { t } = useTranslation();
-  const [playStatus, setPlayStatus] = useState(status || PlayStatus.Pause);
+  const [playStatus, setPlayStatus] = useState(status);
   const [loading, setLoading] = useState(false);
   const [loopMode, setLoopMode] = useState(LoopMode.ListLoop);
   const [progress, setProgress] = useState(0);
@@ -65,10 +66,7 @@ export default function Player(props: propsType) {
     setLoopMode(LoopMode.OneLoop);
     const newPlaylist = [playingPlaylist[playIndex]];
     setPlayingPlaylist(newPlaylist);
-    setPlayIndex(0);
-  }
-  const changeLoopModeListLoop = () => {
-    setLoopMode(LoopMode.ListLoop);
+    setPlayInd是e(LoopMode.ListLoop);
     setPlayingPlaylist(playlist);
   }
   const changeLoopModeShuffleLoop = () => {
@@ -94,7 +92,7 @@ export default function Player(props: propsType) {
     }
   }, [newSong])
 
-  useEffect(() => { 
+  useEffect(() => {
     if (playStatus === PlayStatus.Play) {
       setPlayTimer(setInterval(() => {
         if (!newSong) {
@@ -113,7 +111,7 @@ export default function Player(props: propsType) {
       if (!newSong) return
       newSong.play();
     }
-  }, [playStatus])
+  }, [playStatus]);
 
   useEffect(() => {  
     // 当 playlist 变化时  
@@ -148,7 +146,7 @@ export default function Player(props: propsType) {
             }
           </button>
         }
-        {playStatus === PlayStatus.Pause &&
+        {(playStatus === PlayStatus.Pause || playStatus === PlayStatus.Stop )&&
           <button className="btn btn-square join-item" title={t("Play")} onClick={onplay}>
             {
               loading && <span className="loading loading-spinner"></span>

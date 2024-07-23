@@ -8,11 +8,12 @@ import { PlayStatus } from "./components/Player/types";
 import { ListPage } from "./pages/List/pages";
 import { useSelector } from "react-redux";
 import Table from "./components/Table/component";
+import { IndexPage } from "./pages/Index/pages";
 
 function App() {
-  const [index, setIndex] = useState(0);
   const [playStatus, setPlayStatus] = useState(PlayStatus.Pause);
-  const { playlist } = useSelector((store) => store.playlist);
+  const { status, playlist, index } = useSelector((store) => store.playStatus);
+
   return (
     <Router>
       <div className="flex flex-col w-screen h-screen overflow-hidden">
@@ -22,14 +23,15 @@ function App() {
           <Aside />
           <main className="flex-auto h-full bg-base-100 overflow-y-auto">
             <Routes>
+              < Route path="/" element={<IndexPage />} />
               < Route path="/list" element={<ListPage />} />
-              < Route path="/table" element={<Table />} />
+              {/* < Route path="/table" element={<Table />} /> */}
             </Routes>
             
           </main>
         </div>
         <div className="w-full h-20 mx-auto flex-none bg-base-100 z-50 shadow-inner">
-          <Player playlist={ playlist } index={ index } status={playStatus}/>
+          <Player playlist={ playlist } index={ index } status={status}/>
         </div>
       </div>
     </Router>
