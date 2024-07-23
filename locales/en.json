@@ -9,7 +9,8 @@
   "Library": "Library",
   "List ({{number}})": "List ({{number}})",
   "Playlist.Play": "Play",
-  "Used as a delimiter for multiple singers, etc": "用于多个歌手等之类的分隔符",
+  "Used as a delimiter for multiple singers, etc": "Used as a delimiter for multiple singers, etc",
   ", ": ", ",
-  "Unknown": "Unknown"
+  "Unknown": "Unknown",
+  "Local": "Local"
 }
