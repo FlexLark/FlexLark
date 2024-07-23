@@ -1,7 +1,7 @@
 import "../../../i18n";
-import {Howl, Howler} from 'howler';
-import { GoStart, PlayOne, GoEnd, Pause, PlayOnce, PlayCycle, ShuffleOne } from "@icon-park/react";
-import { ReactNode, useEffect, useState } from "react";
+import { Howl } from 'howler';
+import { GoStart, PlayOne, GoEnd, Pause, PlayOnce, PlayCycle, ShuffleOne, Acoustic } from "@icon-park/react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LoopMode, PlayStatus } from "./types";
 import { formatSecond } from "./tools";
@@ -23,7 +23,7 @@ const HowlConfig = (path: string) => {
 export default function Player(props: propsType) {
   const { status, index } = props;
   const { t } = useTranslation();
-  const [playStatus, setPlayStatus] = useState(status);
+  const [playStatus, setPlayStatus] = useState(status || PlayStatus.Pause);
   const [loading, setLoading] = useState(false);
   const [loopMode, setLoopMode] = useState(LoopMode.ListLoop);
   const [progress, setProgress] = useState(0);
@@ -31,10 +31,8 @@ export default function Player(props: propsType) {
   const [playingPlaylist, setPlayingPlaylist] = useState(playlist);
   const [playIndex, setPlayIndex] = useState(index || 0);
 
-  let [newSong, setNewSong] = useState(
-    playingPlaylist.length === 0 ? null : new Howl(HowlConfig(playingPlaylist[playIndex]?.path))
-  );
-  const [playerTimer, setPlayTimer] = useState(0);
+  let [newSong, setNewSong] = useState<null | Howl>(null);
+  const [playerTimer, setPlayTimer] = useState<number | undefined>(undefined);
 
   const onpause = () => {
     setPlayStatus(PlayStatus.Pause);
@@ -57,7 +55,7 @@ export default function Player(props: propsType) {
     setPlayIndex(playIndex - 1);
   }
   const onprogress = (e) => {
-    if (!newSong) return
+    if (!newSong) return;
     newSong.seek(e?.target.value);
     setProgress(e?.target.value);
   }
@@ -66,7 +64,10 @@ export default function Player(props: propsType) {
     setLoopMode(LoopMode.OneLoop);
     const newPlaylist = [playingPlaylist[playIndex]];
     setPlayingPlaylist(newPlaylist);
-    setPlayIndex(LoopMode.ListLoop);
+    setPlayIndex(0);
+  }
+  const changeLoopModeListLoop = () => {
+    setLoopMode(LoopMode.ListLoop);
     setPlayingPlaylist(playlist);
   }
   const changeLoopModeShuffleLoop = () => {
@@ -76,15 +77,15 @@ export default function Player(props: propsType) {
   }
 
   useEffect(() => {
-    if (!newSong) return
-    setLoading(true);
-    newSong.unload();
+    newSong?.unload();
+    if (playingPlaylist.length < 0 || playingPlaylist.length < playIndex - 1) return;
     setNewSong(new Howl(HowlConfig(playingPlaylist[playIndex]?.path)));
   }, [playIndex]);
   
   useEffect(() => {
     setProgress(0);
-    if (!newSong) return
+    if (!newSong) return;
+    if (newSong.state() === 'loading') setLoading(true);
     newSong.on('load', () => setLoading(false));
     newSong.on('end', () => onnext());
     if (playStatus === PlayStatus.Play) {
@@ -92,7 +93,20 @@ export default function Player(props: propsType) {
     }
   }, [newSong])
 
+  useEffect(() => { 
+    if (playStatus === PlayStatus.Pause) {
+      if (!newSong) return
+      newSong.pause();
+    } else if (playStatus === PlayStatus.Play) {
+      if (!newSong) return
+      newSong.play();
+    }
+  }, [playStatus])
   useEffect(() => {
+    if (playerTimer) { 
+      clearInterval(playerTimer);
+      setPlayTimer(undefined);
+    }
     if (playStatus === PlayStatus.Play) {
       setPlayTimer(setInterval(() => {
         if (!newSong) {
@@ -103,16 +117,9 @@ export default function Player(props: propsType) {
       }, 1000));
     } else {
       clearInterval(playerTimer);
+      setPlayTimer(undefined);
     }
-    if (playStatus === PlayStatus.Pause) {
-      if (!newSong) return
-      newSong.pause();
-    } else if (playStatus === PlayStatus.Play) {
-      if (!newSong) return
-      newSong.play();
-    }
-  }, [playStatus]);
-
+  }, [playIndex, playStatus, playingPlaylist, newSong])
   useEffect(() => {  
     // 当 playlist 变化时  
     setPlaylist(props.playlist);  
@@ -146,7 +153,7 @@ export default function Player(props: propsType) {
             }
           </button>
         }
-        {(playStatus === PlayStatus.Pause || playStatus === PlayStatus.Stop )&&
+        {(playStatus === PlayStatus.Pause || playStatus === PlayStatus.Stop) &&
           <button className="btn btn-square join-item" title={t("Play")} onClick={onplay}>
             {
               loading && <span className="loading loading-spinner"></span>
@@ -182,11 +189,18 @@ export default function Player(props: propsType) {
       </div>
       <div className="divider divider-horizontal"></div>
       <div className="join p-2">
-        <div className="avatar">
-          <div className="w-16 h-16 rounded-full">
-            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+        {
+          playingPlaylist[playIndex]?.cover &&
+          <div className="w-14 rounded-lg mr-4 overflow-hidden">
+            <img src={playingPlaylist[playIndex]?.cover} />
           </div>
-        </div>
+        }
+        {
+          !playingPlaylist[playIndex]?.cover &&
+          <div className="w-14 h-14 flex items-center justify-center bg-base-200 rounded-lg mr-4 overflow-hidden">
+              <Acoustic theme="filled" size="24" fill="#333"/>
+          </div>
+        }
       </div>
       <div className="join p-2">
         <h2 className="text-xl text max-w-48 truncate font-bold leading-20 underline-offset-2 hover:underline">
