@@ -66,7 +66,7 @@ export default function Player(props: propsType) {
     setLoopMode(LoopMode.OneLoop);
     const newPlaylist = [playingPlaylist[playIndex]];
     setPlayingPlaylist(newPlaylist);
-    setPlayInd是e(LoopMode.ListLoop);
+    setPlayIndex(LoopMode.ListLoop);
     setPlayingPlaylist(playlist);
   }
   const changeLoopModeShuffleLoop = () => {
