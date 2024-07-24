@@ -38,6 +38,7 @@ export default function Player(props: propsType) {
     setPlayStatus(PlayStatus.Pause);
   }
   const onplay = () => {
+    if (playingPlaylist.length === 0) return;
     setPlayStatus(PlayStatus.Play);
   }
   const onnext = () => {
