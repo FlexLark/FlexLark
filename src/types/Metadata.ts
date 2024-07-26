@@ -15,10 +15,12 @@ export interface PlaylistMetadata {
   songs: string[] | SongMetadata[]; // song ids
   description?: string;
   cover?: string; // cover image path
+  category?: string | CategoryMetadata; // category id
 }
 export interface AlbumMetadata {
   id: string;
   name: string;
+  description?: string;
   singer?: string | SingerMetadata;
   songs?: string[] | SongMetadata[]; // song ids
   cover?: string; // cover image path
@@ -36,3 +38,5 @@ export interface CategoryMetadata {
   description?: string;
   cover?: string; // cover image path
 }
+
+export type AnyMetadata = SongMetadata | PlaylistMetadata | AlbumMetadata | SingerMetadata | CategoryMetadata;
