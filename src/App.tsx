@@ -7,8 +7,8 @@ import { useState } from "react";
 import { PlayStatus } from "./components/Player/types";
 import { ListPage } from "./pages/List/pages";
 import { useSelector } from "react-redux";
-import Table from "./components/Table/component";
 import { IndexPage } from "./pages/Index/pages";
+import TrainPage from "./pages/Train/pages";
 
 function App() {
   const [playStatus, setPlayStatus] = useState(PlayStatus.Pause);
@@ -25,6 +25,7 @@ function App() {
             <Routes>
               < Route path="/" element={<IndexPage />} />
               < Route path="/list" element={<ListPage />} />
+              < Route path="/train" element={<TrainPage />} />
               {/* < Route path="/table" element={<Table />} /> */}
             </Routes>
             
