@@ -17,6 +17,6 @@ type Props = {
     children: {
         node: ReactNode,
         span: number,
-    }
+    }[]
 }
 ```
