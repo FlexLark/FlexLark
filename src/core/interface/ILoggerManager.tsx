@@ -1,5 +1,5 @@
 
-export interface ILogger {
+export interface ILoggerManager {
   log: (...data: any[]) => void;
   error: (...data: any[]) => void;
   warn: (...data: any[]) => void;

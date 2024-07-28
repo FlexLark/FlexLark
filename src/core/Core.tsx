@@ -4,14 +4,14 @@ import { ViewManager } from "./manager/ViewManager";
 import { HowlOptions } from "howler";
 import { ICoreOptions } from "./interface/ICoreOptions";
 import { CoreState } from "./types/enum";
-import { ILogger } from "./interface/ILogger";
+import { ILoggerManager } from "./interface/ILoggerManager";
 import { Howl } from "howler";
 export default class Core {
   howler?: Howl;
   options?: ICoreOptions = {};
   howlOptions?: HowlOptions;
   state: CoreState = CoreState.STOP;
-  loggerManager: ILogger;
+  loggerManager: ILoggerManager;
   pluginManager: PluginManager;
   viewManager: ViewManager;
 

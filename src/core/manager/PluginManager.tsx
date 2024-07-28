@@ -1,15 +1,15 @@
 import { DEFAULT_PRIORITY } from "..";
-import { ILogger } from "../interface/ILogger";
+import { ILoggerManager } from "../interface/ILoggerManager";
 import { LoggerManager } from "./LoggerManager";
 import { IPlugin } from "../interface/IPluginManager";
 
 export class PluginManager {
   plugins: IPlugin[] = [];
   pluginMap: Map<string, IPlugin> = new Map();
-  LoggerManager: ILogger = new LoggerManager();
+  LoggerManager: ILoggerManager = new LoggerManager();
   ctx: any;
 
-  constructor(logger: ILogger, ctx: any) {
+  constructor(logger: ILoggerManager, ctx: any) {
     this.LoggerManager = logger;
     this.ctx = ctx;
   }
@@ -21,7 +21,6 @@ export class PluginManager {
       const aPriority = a.priority ?? DEFAULT_PRIORITY;
       const bPriority = b.priority ?? DEFAULT_PRIORITY;
     
-      // 返回负值则 a 在 b 之前，正值则 a 在 b 之后
       return aPriority - bPriority;
     });
     

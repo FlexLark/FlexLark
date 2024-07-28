@@ -1,4 +1,4 @@
-import { ILogger } from "../interface/ILogger";
+import { ILogger } from "../interface/ILoggerManager";
 
 export class LoggerManager implements ILogger {
   private logger: ILogger;
