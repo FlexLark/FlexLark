@@ -25,8 +25,6 @@ export class PluginManager {
       return aPriority - bPriority;
     });
     
-    console.log(this.plugins);
-    
     pluginMap.set(plugin.name, plugin);
     LoggerManager.info(`register plugin ${plugin.name}`);
     this.ctx = plugin.install(ctx);

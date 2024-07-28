@@ -5,7 +5,7 @@ import { HowlOptions } from "howler";
 import { ICoreOptions } from "./interface/ICoreOptions";
 import { CoreState } from "./types/enum";
 import { ILogger } from "./interface/ILogger";
-
+import { Howl } from "howler";
 export default class Core {
   howler?: Howl;
   options?: ICoreOptions = {};
