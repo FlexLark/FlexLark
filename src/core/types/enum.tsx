@@ -1,9 +1,9 @@
 export enum CoreState {
-  STOP,
-  PLAYING,
-  PAUSED,
-  LOADING,
-  ERROR
+  STOP = 'STOP',
+  PLAYING = 'PLAYING',
+  PAUSED = 'PAUSED',
+  LOADING = 'LOADING',
+  ERROR = 'ERROR'
 }
 
 export enum EventType {
