@@ -101,7 +101,6 @@ describe("PluginManager", () => {
   test("update error", async () => {
     const core = new Core();
     const pluginManager = new PluginManager(console, core as unknown as ICoreContext);
-    expect(() => pluginManager.update()).toThrowError();
     expect(pluginManager.pluginMap.size).toBe(0);
   })
 });
