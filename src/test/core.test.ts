@@ -5,6 +5,8 @@ import { describe, expect, test, vi } from 'vitest'
 import { IPlugin } from '../core/interface/IPlugin';
 import { PluginManager } from '../core/manager/PluginManager';
 import { ViewManager } from '../core/manager/ViewManager';
+import { ICoreContext } from '../core/interface/ICoreContext';
+import { LoggerManager } from '../core/manager/LoggerManager';
 
 describe("Core", () => {
   test('constructor', () => {
@@ -26,7 +28,7 @@ describe("Core", () => {
       description: 'test',
       version: '1.0.0',
       author: 'test',
-      install: function (core: Core): Core {
+      install: function (core: ICoreContext): ICoreContext {
         console.log('install');
         return core;
       }
@@ -38,7 +40,7 @@ describe("Core", () => {
       version: '1.0.0',
       author: 'test',
       priority: 0,
-      install: function (core: Core): Core {
+      install: function (core: ICoreContext): ICoreContext {
         console.log('install');
         return core;
       }
@@ -58,6 +60,27 @@ describe("Core", () => {
     const core = new Core();
     core.destroy();
     expect(core.state).toBe(CoreState.STOP);
+  });
+
+  test('destroy Error', () => {
+    const mockLogger = {
+      info: vi.fn(),
+      error: vi.fn(),
+    };
+    const mockPluginManager = {
+      destroy: vi.fn().mockImplementation(() => {
+        throw new Error('PluginManager destroy error');
+      }),
+    };
+
+    const core = new Core();
+
+    core.pluginManager = mockPluginManager as unknown as PluginManager;
+    core.loggerManager = mockLogger as unknown as LoggerManager;
+    core.destroy();
+    expect(core.state).toBe(CoreState.STOP);
+    // expect(mockLogger.info).toHaveBeenCalledWith('destroy core, state set to STOP');
+    expect(mockLogger.error).toHaveBeenCalledWith(expect.stringContaining('Error during core destruction:'));
   });
 
 
