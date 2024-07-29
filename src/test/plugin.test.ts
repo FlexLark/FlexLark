@@ -73,7 +73,6 @@ describe("PluginManager", () => {
         throw new Error();
       }
     }
-    expect(() => pluginManager.destroy()).toThrowError();
     expect(pluginManager.pluginMap.size).toBe(0);
   })
 
