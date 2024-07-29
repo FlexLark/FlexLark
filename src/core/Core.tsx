@@ -38,7 +38,11 @@ export default class Core {
   }
 
   public register(plugin: IPlugin): void {
-    this.pluginManager.register(plugin);
+    try {
+      this.pluginManager.register(plugin);
+    } catch (error) {
+      this.loggerManager.error(`Error during plugin registration: ${error}`);
+    }
   }
   
   public destroy():void {

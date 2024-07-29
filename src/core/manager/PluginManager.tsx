@@ -19,7 +19,10 @@ export class PluginManager implements IPluginManager {
   public register(plugin: IPlugin): void {
     const { ctx, plugins, pluginMap, LoggerManager } = this;
 
+    this.ctx = plugin.install(ctx);
+
     plugins.push(plugin);
+    
     this.plugins = plugins.sort((a, b) => {
       const aPriority = a.priority ?? DEFAULT_PRIORITY;
       const bPriority = b.priority ?? DEFAULT_PRIORITY;
@@ -29,7 +32,6 @@ export class PluginManager implements IPluginManager {
     
     pluginMap.set(plugin.name, plugin);
     LoggerManager.info(`register plugin ${plugin.name}`);
-    this.ctx = plugin.install(ctx);
   }
 
   public destroy(): void {

@@ -55,7 +55,23 @@ describe("Core", () => {
     expect(core.pluginManager.plugins[1]).toBe(plugin);
   });
 
-
+  test('register Error', () => {
+    const core = new Core();
+    const plugin: IPlugin = {
+      id: 'test',
+      name: 'test',
+      description: 'test',
+      version: '1.0.0',
+      author: 'test',
+      install: function (core: ICoreContext): ICoreContext {
+        throw new Error('install error');
+        return core;
+      }
+    };
+    core.register(plugin);
+    expect(core.pluginManager.plugins.length).toBe(0);
+  });
+  
   test('destroy', () => {
     const core = new Core();
     core.destroy();
