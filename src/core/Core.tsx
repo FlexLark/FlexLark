@@ -29,9 +29,10 @@ export default class Core {
     this.state = CoreState.STOP;
     this.ctx = {
       state: this.state,
+      logger: this.loggerManager,
       on: this.eventManager.on.bind(this.eventManager),
       off: this.eventManager.off.bind(this.eventManager),
-    } as ICoreContext;
+    };
 
     this.pluginManager = new PluginManager(this.loggerManager, this.ctx);
   }
@@ -41,10 +42,19 @@ export default class Core {
   }
   
   public destroy():void {
-    this.state = CoreState.STOP;
-    this.pluginManager.destroy();
-    this.loggerManager.info(`destroy core`);
-    this.howler?.stop();
+    try {
+      this.state = CoreState.STOP;
+  
+      this.pluginManager.destroy();
+  
+      this.howler?.stop();
+      this.howler?.unload();
+      this.howler = undefined;
+  
+      this.loggerManager.info(`destroy core, state set to STOP`);
+    } catch (error) {
+      this.loggerManager.error(`Error during core destruction: ${error}`);
+    }
   }
 
   public run(): void {
