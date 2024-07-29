@@ -19,5 +19,12 @@ export default defineConfig(async () => ({
     },
   },
   test: {
+    reporters: [
+      ["html", { file: "coverage.html" }]
+    ],
+    coverage: {
+      reportsDirectory: './coverage', // 指定覆盖率报告目录
+      reporter: ['text', 'json', 'html'], // 指定覆盖率报告格式
+    },
   }
 }));
