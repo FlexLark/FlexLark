@@ -1,4 +1,4 @@
-import { IPlugin } from "./interface/IPluginManager";
+import { IPlugin } from "./interface/IPlugin";
 import { PluginManager } from "./manager/PluginManager";
 import { ViewManager } from "./manager/ViewManager";
 import { HowlOptions } from "howler";
@@ -6,24 +6,34 @@ import { ICoreOptions } from "./interface/ICoreOptions";
 import { CoreState } from "./types/enum";
 import { ILoggerManager } from "./interface/ILoggerManager";
 import { Howl } from "howler";
+import { EventManager } from "./manager/EventManager";                       
+import { ICoreContext } from "./interface/ICoreContext";
 export default class Core {
   howler?: Howl;
-  options?: ICoreOptions = {};
+  options?: ICoreOptions;
   howlOptions?: HowlOptions;
-  state: CoreState = CoreState.STOP;
+  state: CoreState;
   loggerManager: ILoggerManager;
   pluginManager: PluginManager;
   viewManager: ViewManager;
-
-  ctx: Core = this; // TODO 修改 ctx 传递值以及安全性处理
+  eventManager: EventManager;
+  ctx: ICoreContext; 
 
   constructor() {
-    this.loggerManager = console;
-    this.pluginManager = new PluginManager(this.loggerManager, this);
-    this.viewManager = new ViewManager(this.loggerManager, this);
     this.howler = new Howl({
       src: [''],
     })
+    this.loggerManager = console;
+    this.viewManager = new ViewManager(this.loggerManager, this);
+    this.eventManager = new EventManager(this.loggerManager);
+    this.state = CoreState.STOP;
+    this.ctx = {
+      state: this.state,
+      on: this.eventManager.on.bind(this.eventManager),
+      off: this.eventManager.off.bind(this.eventManager),
+    } as ICoreContext;
+
+    this.pluginManager = new PluginManager(this.loggerManager, this.ctx);
   }
 
   public register(plugin: IPlugin): void {

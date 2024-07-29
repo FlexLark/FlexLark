@@ -1,15 +1,18 @@
 import { DEFAULT_PRIORITY } from "..";
 import { ILoggerManager } from "../interface/ILoggerManager";
 import { LoggerManager } from "./LoggerManager";
-import { IPlugin } from "../interface/IPluginManager";
+import { IPlugin } from "../interface/IPlugin";
+import { ICoreContext } from "../interface/ICoreContext";
+import { IPluginManager } from "../interface/IPluginManager";
 
-export class PluginManager {
+
+export class PluginManager implements IPluginManager {
   plugins: IPlugin[] = [];
   pluginMap: Map<string, IPlugin> = new Map();
   LoggerManager: ILoggerManager = new LoggerManager();
   ctx: any;
 
-  constructor(logger: ILoggerManager, ctx: any) {
+  constructor(logger: ILoggerManager, ctx: ICoreContext) {
     this.LoggerManager = logger;
     this.ctx = ctx;
   }

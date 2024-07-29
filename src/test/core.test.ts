@@ -2,7 +2,7 @@ import Core from '../core/index';
 import { CoreState } from "../core/types/enum";
 import { Howl } from 'howler';
 import { describe, expect, test, vi } from 'vitest'
-import { IPlugin } from '../core/interface/IPluginManager';
+import { IPlugin } from '../core/interface/IPlugin';
 import { PluginManager } from '../core/manager/PluginManager';
 import { ViewManager } from '../core/manager/ViewManager';
 

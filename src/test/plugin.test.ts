@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from "vitest";
 import { PluginManager } from "../core/manager/PluginManager";
-import { IPlugin } from "../core/interface/IPluginManager";
+import { IPlugin } from "../core/interface/IPlugin";
 import Core from "../core";
 
 describe("PluginManager", () => {
