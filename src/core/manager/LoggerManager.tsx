@@ -1,11 +1,12 @@
-import { ILogger } from "../interface/ILoggerManager";
+import { ILoggerManager } from "../interface/ILoggerManager";
 
-export class LoggerManager implements ILogger {
-  private logger: ILogger;
+export class LoggerManager implements ILoggerManager {
+  private logger: ILoggerManager;
   constructor() {
     this.logger = console;
   }
-  public setLogger(logger: ILogger): void {
+  
+  public setLogger(logger: ILoggerManager): void {
     this.logger = logger;
   }
 

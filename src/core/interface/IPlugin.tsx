@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import Core from "..";
 import { ICoreContext } from "./ICoreContext";
 
 export interface IPlugin {

@@ -38,7 +38,7 @@ export class PluginManager implements IPluginManager {
     const { ctx, plugins, LoggerManager } = this;
 
     plugins.forEach(plugin => {
-      if (plugin && typeof plugin.destroy === 'function') {
+      if (typeof plugin?.destroy === 'function') {
         try {
           this.ctx = plugin?.destroy(ctx);
           LoggerManager.info(`destroy plugin ${plugin.name}`);
@@ -61,7 +61,7 @@ export class PluginManager implements IPluginManager {
 
     plugins.forEach(plugin => {
       try {
-        if (plugin && typeof plugin.update === 'function') {
+        if (typeof plugin?.update === 'function') {
           plugin?.update(ctx);
         }
       } catch (error) {

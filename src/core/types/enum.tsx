@@ -24,5 +24,6 @@ export enum EventType {
   SET_BUFFERING,
   SET_ERROR,
   SET_PLAYING,
-  SET_PAUSED
+  SET_PAUSED,
+  TEST
 }

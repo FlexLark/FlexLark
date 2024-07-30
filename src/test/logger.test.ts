@@ -2,6 +2,36 @@ import { describe, test, expect, vi } from "vitest";
 import { LoggerManager } from "../core/manager/LoggerManager";
 
 describe("LoggerManager", () => {
+  test("constructor", () => {
+    const logger = new LoggerManager();
+    expect(logger).toBeInstanceOf(LoggerManager);
+  })
+
+  test("setLogger", () => {
+    const logger = new LoggerManager();
+    const newLogger = {
+      log: vi.fn(),
+      error: vi.fn(),
+      warn: vi.fn(),
+      debug: vi.fn(),
+      info: vi.fn()
+    };
+
+    logger.setLogger(newLogger);
+
+    logger.log("test message");
+    logger.error("test error");
+    logger.warn("test warning");
+    logger.debug("test debug message");
+    logger.info("test info message");
+
+    expect(newLogger.log).toHaveBeenCalled();
+    expect(newLogger.error).toHaveBeenCalled();
+    expect(newLogger.warn).toHaveBeenCalled();
+    expect(newLogger.debug).toHaveBeenCalled();
+    expect(newLogger.info).toHaveBeenCalled();
+  });
+
   test("log", () => {
     const logger = new LoggerManager();
     const consoleLogSpy = vi.spyOn(console, 'log');
