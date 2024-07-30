@@ -1,0 +1,30 @@
+name: Test and Coverage
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18' # 使用适合的 Node.js 版本
+
+    - name: Install PNPM
+      run: npm install pnpm -g
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Run tests and generate coverage report
+      run: pnpm coverage
+
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4.0.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage/*.json # 确保这个路径与实际生成的覆盖率报告路径匹配
