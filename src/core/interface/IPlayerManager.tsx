@@ -1,26 +1,23 @@
-import { HowlOptions } from "howler";
-import { SongMetadata } from ".";
-import { CoreState } from "./enum";
-
+import { ISong } from "../interface/ISong";
+import { CoreState } from "../types/enum";
+import { ModeType } from "../types/ModeType";
+import { IPlayerOptions } from "./IPlayerOptions";
+import { IPlaylistManager } from "./IPlaylistManager";
 
 export interface IPlayerManager {
-  playlist: SongMetadata[];
-  current: SongMetadata;
-  currentIndex: number;
-  howler: Howl;
-  state: CoreState;
-  play: (song?: SongMetadata) => void;
+  playlistManager: IPlaylistManager;
+  play: (song?: ISong) => void;
   pause: () => void;
   stop: () => void;
-  load: (song?: SongMetadata) => void;
-  update: () => void;
+  load: (song?: ISong) => void;
   destroy: () => void;
-  next: () => void;
-  previous: () => void;
   seek: (time: number) => void;
-  onStateChange: (newState: CoreState) => void;
-  shuffle: () => void;
-  repeat: (mode: 'none' | 'one' | 'all') => void;
+  getSeek: () => number;
+  setMode: (mode: ModeType) => void;
+  getMode: () => ModeType;
   setVolume: (volume: number) => void;
-  setOptions: (howlOptions: HowlOptions) => void;
+  getVolume: () => number;
+  setOptions: (howlOptions: IPlayerOptions) => void;
+  getOptions: () => IPlayerOptions;
+  getState: () => CoreState;
 }
