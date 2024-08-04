@@ -16,7 +16,6 @@ export class SettingsManager implements ISettingsManager {
     if (isExists) {
       let contents = await readTextFile('settings.json5', { baseDir: BaseDirectory.AppConfig });
       contents = JSON5.parse(contents);
-      console.log('settings.json5', contents);
       this.settings = Object.keys(contents).map((key: any) => {
         return {
           key,
@@ -32,7 +31,10 @@ export class SettingsManager implements ISettingsManager {
     }
   }
   saveSettings(): Promise<void> {
-    return writeTextFile('settings.json5', JSON5.stringify(this.settings), { baseDir: BaseDirectory.AppConfig });
+    return writeTextFile(
+      'settings.json5',
+      JSON5.stringify(Object.fromEntries(this.settingsMap.entries())),
+      { baseDir: BaseDirectory.AppConfig });
   }
   getItem(key: string): string | null {
     return this.settingsMap.get(key) || null;

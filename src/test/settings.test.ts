@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "vitest";
 import { SettingsManager } from "../core/manager/SettingsManager";
 import { mockIPC, clearMocks } from "@tauri-apps/api/mocks";
-
+import JSON5 from "json5";
 
 describe("SettingsManager", () => {
   afterEach(() => {
@@ -29,10 +29,10 @@ describe("SettingsManager", () => {
       }
       if (cmd === 'plugin:fs|write_text_file') {
         if (args.path === 'settings.json5') {
-          expect(args.data).toStrictEqual(`{
+          expect(JSON5.parse(args.data)).toStrictEqual(JSON5.parse(`{
             "theme": "light",
             "language": "en"
-          }`);
+          }`));
           return true;
         }
         throw new Error('File not found');
