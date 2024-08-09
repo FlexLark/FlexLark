@@ -18,7 +18,7 @@ describe("SettingsManager", () => {
         return false;
       }
       if (cmd === 'plugin:fs|read_text_file') {
-        if (args.path === 'settings.json5' ) {
+        if (args.path === 'settings.json5') {
           return `
           {
             "theme": "dark",
