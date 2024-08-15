@@ -3,6 +3,7 @@ import { ILoggerManager } from "../interface/ILoggerManager";
 import { IPlaylist } from "../interface/IPlaylist";
 import { IPlaylistManager } from "../interface/IPlaylistManager";
 import { ISong } from "../interface/ISong";
+import { EventType } from "../types/enum";
 
 export class PlaylistManager implements IPlaylistManager {
   private _songMap: Map<string, ISong>;
@@ -73,6 +74,7 @@ export class PlaylistManager implements IPlaylistManager {
     this._logger.log('Add Song - This:', this);
     this._logger.log('Song Map:', Array.from(this._songMap.entries()));
     this._logger.log('Playlist By Map Key:', this._playlistByMapKey);
+    this._ctx.emit(EventType.CHANGE_PLAYLIST, this._playlistByMapKey);
   }
   removeSong(songId: string): void {
     this._songMap.delete(songId);

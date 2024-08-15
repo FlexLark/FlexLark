@@ -25,5 +25,6 @@ export enum EventType {
   SET_ERROR,
   SET_PLAYING,
   SET_PAUSED,
-  TEST
+  TEST,
+  CHANGE_PLAYLIST
 }

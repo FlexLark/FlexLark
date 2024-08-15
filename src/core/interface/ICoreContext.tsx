@@ -9,6 +9,7 @@ import { IViewManager } from "./IViewManager";
 export interface ICoreContext {
   state: CoreState;
   logger: ILoggerManager;
+  emit: IEventManager['emit'];
   on: IEventManager['on'];
   off: IEventManager['off'];
   utils: IUtils;
