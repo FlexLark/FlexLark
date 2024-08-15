@@ -59,6 +59,14 @@ export class PlayerManager implements IPlayerManager {
   };
   load(song?: ISong) {
     if (!song && !this?.song) return;
+    if (!this.song) {
+      const playlist = this.ctx.playlistManager.getPlaylist();
+      const index = this.ctx.playlistManager.getPlayIndex();
+      this.logger.log('Playlist:', playlist);
+      this.logger.log('Index:', index);
+      if (!playlist || !playlist[index]) return;
+      this.song = playlist[index];
+    }
     if (!song) {
       song = this.song;
     }
