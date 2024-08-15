@@ -1,20 +1,17 @@
-import { Howl, HowlOptions } from "howler";
-import { ISongMetadata } from "../interface/ISongMetadata";
+import { Howl } from "howler";
 import { IPlayerManager } from "../interface/IPlayerManager";
 import { CoreState } from "../types/enum";
 import { IPlayerOptions } from "../interface/IPlayerOptions";
 import { ISong } from "../interface/ISong";
-import { IPlaylistManager } from "../interface/IPlaylistManager";
 import { ILoggerManager } from "../interface/ILoggerManager";
 import { ICoreContext } from "../interface/ICoreContext";
-import { PlaylistManager } from "./PlaylistManager";
 import { ModeType } from "../types/ModeType";
 
 
 export class PlayerManager implements IPlayerManager {
   logger: ILoggerManager;
   state: CoreState;
-  playlistManager: IPlaylistManager;
+  ctx: ICoreContext;
   howler?: Howl;
   howlOptions: IPlayerOptions;
   mode: ModeType;
@@ -24,7 +21,7 @@ export class PlayerManager implements IPlayerManager {
   constructor(logger: ILoggerManager, ctx: ICoreContext) {
     this.volume = 60;
     this.logger = logger;
-    this.playlistManager = ctx.playlistManager;
+    this.ctx = ctx;
     this.howlOptions = {
       src: ['']
     };
@@ -40,8 +37,8 @@ export class PlayerManager implements IPlayerManager {
       this.load(song);
     }
     if (!this.song) {
-      const playlist = this.playlistManager.getPlaylist();
-      const index = this.playlistManager.getPlayIndex();
+      const playlist = this.ctx.playlistManager.getPlaylist();
+      const index = this.ctx.playlistManager.getPlayIndex();
       this.logger.log('Playlist:', playlist);
       this.logger.log('Index:', index);
       if (!playlist || !playlist[index]) return;

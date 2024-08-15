@@ -4,6 +4,7 @@ import { ILoggerManager } from "./ILoggerManager";
 import { IPlayerManager } from "./IPlayerManager";
 import { IPlaylistManager } from "./IPlaylistManager";
 import { IUtils } from "./IUtils";
+import { IViewManager } from "./IViewManager";
 
 export interface ICoreContext {
   state: CoreState;
@@ -13,4 +14,5 @@ export interface ICoreContext {
   utils: IUtils;
   playerManager: IPlayerManager;
   playlistManager: IPlaylistManager;
+  viewManager: IViewManager;
 }

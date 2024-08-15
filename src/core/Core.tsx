@@ -10,6 +10,9 @@ import { EventManager } from "./manager/EventManager";
 import { ICoreContext } from "./interface/ICoreContext";
 import { PlayerManager } from "./manager/PlayerManager";
 import { PlaylistManager } from "./manager/PlaylistManager";
+import { IPlayerManager } from "./interface/IPlayerManager";
+import { IViewManager } from "./interface/IViewManager";
+import { IPlaylistManager } from "./interface/IPlaylistManager";
 export default class Core {
   howler?: Howl;
   options?: ICoreOptions;
@@ -21,6 +24,7 @@ export default class Core {
   eventManager: EventManager;
   playlistManager: PlaylistManager;
   playerManager: PlayerManager;
+  ctx: ICoreContext;
 
   constructor() {
     this.howler = new Howl({
@@ -28,24 +32,29 @@ export default class Core {
     })
     this.loggerManager = console;
     this.state = CoreState.STOP;
+
     this.eventManager = new EventManager(this.loggerManager);
-    this.viewManager = new ViewManager(this.loggerManager, this);
 
-    this.pluginManager = new PluginManager(this.loggerManager, this as unknown as ICoreContext);
-    this.playlistManager = new PlaylistManager(this.loggerManager, this as unknown as ICoreContext);
-    this.playerManager = new PlayerManager(this.loggerManager, this as unknown as ICoreContext);
-  }
-
-  private getCtx(): ICoreContext {
-    return {
+    this.ctx = {
       state: this.state,
       logger: this.loggerManager,
       utils: {},
       on: this.eventManager.on,
       off: this.eventManager.off,
-      playerManager: this.playerManager,
-      playlistManager: this.playlistManager,
+      playerManager: {} as IPlayerManager,
+      playlistManager:  {} as IPlaylistManager,
+      viewManager:  {} as IViewManager,
     }
+
+    this.viewManager = new ViewManager(this.loggerManager, this.ctx);
+
+    this.pluginManager = new PluginManager(this.loggerManager, this.ctx);
+    this.playlistManager = new PlaylistManager(this.loggerManager, this.ctx);
+    this.playerManager = new PlayerManager(this.loggerManager, this.ctx);
+
+    this.ctx.playerManager = this.playerManager;
+    this.ctx.playlistManager = this.playlistManager;
+    this.ctx.viewManager = this.viewManager;
   }
 
   public register(plugin: IPlugin): void {
@@ -77,33 +86,23 @@ export default class Core {
   }
 
   public stop(): void {
-    const { howler, update, loggerManager } = this;
-
-    this.state = CoreState.STOP;
-    
-    loggerManager.info(`stop core`);
-    update();
-    howler?.stop();
+    this.playerManager.stop();
   }
 
   public pause(): void {
-    const { howler, update, loggerManager } = this;
-
-    this.state = CoreState.PAUSED;
-
-    loggerManager.info(`pause core`);
-    update();
-    howler?.pause();
+    this.playerManager.pause();
   }
 
   public play(): void {
-    const { howler, update, loggerManager } = this;
+    this.playerManager.play();
+  }
 
-    this.state = CoreState.PLAYING;
+  public next(): void {
+    this.playlistManager.next();
+  }
 
-    update();
-    loggerManager.info(`play core`);
-    howler?.play();
+  public previous(): void {
+    this.playlistManager.previous();
   }
 
   public update(): void {
@@ -121,6 +120,6 @@ export default class Core {
   }
   public render(): React.ReactNode {
     this.loggerManager.info(`render core`);
-    return this.viewManager.render();
+    return this.viewManager.render(this);
   }
 }

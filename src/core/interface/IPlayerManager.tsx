@@ -5,7 +5,6 @@ import { IPlayerOptions } from "./IPlayerOptions";
 import { IPlaylistManager } from "./IPlaylistManager";
 
 export interface IPlayerManager {
-  playlistManager: IPlaylistManager;
   play: (song?: ISong) => void;
   pause: () => void;
   stop: () => void;
