@@ -14,16 +14,20 @@ export class PlaylistManager implements IPlaylistManager {
   private _ctx: ICoreContext;
 
   constructor(logger: ILoggerManager, ctx: ICoreContext) {
+    this._ctx = ctx;
     this._songMap = new Map<string, ISong>();
     this._playlistByMapKey = [];
     this._playIndex = 0;
     this._isShuffled = false;
     this._playinglistByMapKey = [];
     this._logger = logger;
-    this._ctx = ctx;
   }
   getPlaylist() {
     const playlist = this._playlistByMapKey.map((key) => this._songMap.get(key));
+    
+    this._logger.log('Get Playlist - Context:', this._ctx);
+    this._logger.log('Get Playlist - This:', this);
+    this._logger.log('Playlist:', playlist);
     return playlist.filter((song) => song !== undefined);
   }
   setPlaylist(playlist: ISong[]): void {
@@ -34,6 +38,7 @@ export class PlaylistManager implements IPlaylistManager {
     this._playinglistByMapKey = this._playlistByMapKey.slice();
   }
   getPlayIndex(): number {
+    console.log(this);
     return this._playIndex;
   }
   setPlayIndex(index: number): void {
@@ -64,6 +69,10 @@ export class PlaylistManager implements IPlaylistManager {
     this._songMap.set(song.id, song);
     this._playlistByMapKey.push(song.id);
     this._playinglistByMapKey.push(song.id);
+    this._logger.log('Add Song - Context:', this._ctx);
+    this._logger.log('Add Song - This:', this);
+    this._logger.log('Song Map:', Array.from(this._songMap.entries()));
+    this._logger.log('Playlist By Map Key:', this._playlistByMapKey);
   }
   removeSong(songId: string): void {
     this._songMap.delete(songId);

@@ -12,6 +12,7 @@ import { ModeType } from "../types/ModeType";
 
 
 export class PlayerManager implements IPlayerManager {
+  logger: ILoggerManager;
   state: CoreState;
   playlistManager: IPlaylistManager;
   howler?: Howl;
@@ -22,7 +23,8 @@ export class PlayerManager implements IPlayerManager {
 
   constructor(logger: ILoggerManager, ctx: ICoreContext) {
     this.volume = 60;
-    this.playlistManager = new PlaylistManager(logger, ctx);
+    this.logger = logger;
+    this.playlistManager = ctx.playlistManager;
     this.howlOptions = {
       src: ['']
     };
@@ -31,11 +33,20 @@ export class PlayerManager implements IPlayerManager {
     this.mode = ModeType.LOOP;
     this.state = CoreState.STOP;
   }
+  
   play(song?: ISong) {
-    if (!song && !this.song) return;
     if (song) {
       this.song = song;
       this.load(song);
+    }
+    if (!this.song) {
+      const playlist = this.playlistManager.getPlaylist();
+      const index = this.playlistManager.getPlayIndex();
+      this.logger.log('Playlist:', playlist);
+      this.logger.log('Index:', index);
+      if (!playlist || !playlist[index]) return;
+      this.song = playlist[index];
+      this.load(this.song);
     }
 
     this.state = CoreState.PLAYING;
@@ -50,7 +61,7 @@ export class PlayerManager implements IPlayerManager {
     this.howler?.stop();
   };
   load(song?: ISong) {
-    if (!song && !this.song) return;
+    if (!song && !this?.song) return;
     if (!song) {
       song = this.song;
     }

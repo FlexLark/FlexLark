@@ -8,6 +8,8 @@ import { ILoggerManager } from "./interface/ILoggerManager";
 import { Howl } from "howler";
 import { EventManager } from "./manager/EventManager";                       
 import { ICoreContext } from "./interface/ICoreContext";
+import { PlayerManager } from "./manager/PlayerManager";
+import { PlaylistManager } from "./manager/PlaylistManager";
 export default class Core {
   howler?: Howl;
   options?: ICoreOptions;
@@ -17,24 +19,33 @@ export default class Core {
   pluginManager: PluginManager;
   viewManager: ViewManager;
   eventManager: EventManager;
-  ctx: ICoreContext; 
+  playlistManager: PlaylistManager;
+  playerManager: PlayerManager;
 
   constructor() {
     this.howler = new Howl({
       src: [''],
     })
     this.loggerManager = console;
-    this.viewManager = new ViewManager(this.loggerManager, this);
-    this.eventManager = new EventManager(this.loggerManager);
     this.state = CoreState.STOP;
-    this.ctx = {
+    this.eventManager = new EventManager(this.loggerManager);
+    this.viewManager = new ViewManager(this.loggerManager, this);
+
+    this.pluginManager = new PluginManager(this.loggerManager, this as unknown as ICoreContext);
+    this.playlistManager = new PlaylistManager(this.loggerManager, this as unknown as ICoreContext);
+    this.playerManager = new PlayerManager(this.loggerManager, this as unknown as ICoreContext);
+  }
+
+  private getCtx(): ICoreContext {
+    return {
       state: this.state,
       logger: this.loggerManager,
-      on: this.eventManager.on.bind(this.eventManager),
-      off: this.eventManager.off.bind(this.eventManager),
-    };
-
-    this.pluginManager = new PluginManager(this.loggerManager, this.ctx);
+      utils: {},
+      on: this.eventManager.on,
+      off: this.eventManager.off,
+      playerManager: this.playerManager,
+      playlistManager: this.playlistManager,
+    }
   }
 
   public register(plugin: IPlugin): void {
@@ -107,5 +118,9 @@ export default class Core {
     this.update();
     this.loggerManager.info(`load core`);
     this.howler?.load();
+  }
+  public render(): React.ReactNode {
+    this.loggerManager.info(`render core`);
+    return this.viewManager.render();
   }
 }

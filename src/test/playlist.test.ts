@@ -117,8 +117,9 @@ describe("PlaylistManager", () => {
   test("should add a song", () => {
     const ctx = {} as ICoreContext;
     const playlistManager = new PlaylistManager(console, ctx);
-    const song = {
-      id: "1"
+    const song: ISong = {
+      id: '1',
+      url: "http://127.0.0.1:8080/song01.wav",
     } as ISong;
 
     playlistManager.addSong(song);
@@ -137,6 +138,7 @@ describe("PlaylistManager", () => {
     } as ISong;
 
     playlistManager.addSong(song);
+    expect(playlistManager.getPlaylist()).toStrictEqual([song]);
     playlistManager.removeSong(song.id);
 
     expect(playlistManager.getPlaylist()).toStrictEqual([]);
