@@ -1,0 +1,16 @@
+{
+  "Player control": "",
+  "Back": "Back",
+  "Play": "Play",
+  "Pause": "Pause",
+  "Next": "Next",
+  "Empty Playlist": "Empty Playlist",
+  "Volume {{value}}%": "Volume {{value}}%",
+  "Library": "Library",
+  "List ({{number}})": "List ({{number}})",
+  "Playlist.Play": "Play",
+  "Used as a delimiter for multiple singers, etc": "Used as a delimiter for multiple singers, etc",
+  ", ": ", ",
+  "Unknown": "Unknown",
+  "Local": "Local"
+}

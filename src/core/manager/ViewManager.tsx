@@ -6,6 +6,12 @@ import { ISong } from "../interface/ISong";
 import { IViewManager } from "../interface/IViewManager";
 import Core from "../Core";
 import { EventType } from "../types/enum";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';  
+import Aside from "../../components/Aside/components";
+import { IndexPage } from "../../pages/Index/pages";
+import Player from "../../components/Player/component";
+import { ListPage } from "../../pages/List/pages";
+import TrainPage from "../../pages/Train/pages";
 
 export class ViewManager implements IViewManager {
   logger: LoggerManager;
@@ -18,7 +24,8 @@ export class ViewManager implements IViewManager {
   }
   public render(core: Core): ReactNode {
     const [playlist, setPlaylist] = useState<ISong[]>(core.playlistManager.getPlaylist());
-      console.log(typeof core.eventManager.on);
+    const [playIndex, setPlayIndex] = useState<number>(core.playlistManager.getPlayIndex());
+    const [status, setStatus] = useState<string>(core.state);
 
     // // 当 playlistManager 发生变化时，更新播放列表
     useEffect(() => {
@@ -45,25 +52,27 @@ export class ViewManager implements IViewManager {
     } as ISong;
     
     return (<>
-      <div>
-        <h1>FlexLark</h1>
-        <div>
-          <button onClick={() => core.playlistManager.addSong(song)}>添加歌曲</button>
-          <button onClick={() => core.playlistManager.getPlaylist()}>获取播放列表</button>
-          <button onClick={() => core.play()}>播放</button>
-          <button onClick={() => core.pause()} >暂停</button>
-          <button onClick={() => core.stop()}>停止</button>
-          <button onClick={() => core.next()}>下一首</button>
-          <button onClick={() => core.previous()}>上一首</button>
+      <Router>
+        <div className="flex flex-col w-screen h-screen overflow-hidden">
+          <div className="w-full flex flex-1" style={{
+            height: "calc(100vh - 5rem)"
+          }}>
+            <Aside />
+            <main className="flex-auto h-full bg-base-100 overflow-y-auto">
+              <Routes>
+                < Route path="/" element={<IndexPage />} />
+                < Route path="/list" element={<ListPage />} />
+                < Route path="/train" element={<TrainPage />} />
+                {/* < Route path="/table" element={<Table />} /> */}
+              </Routes>
+              
+            </main>
+          </div>
+          <div className="w-full h-20 mx-auto flex-none bg-base-100 z-50 shadow-inner">
+            <Player playlist={ playlist } index={ playIndex } status={status}/>
+          </div>
         </div>
-        <div>
-          {
-            playlist.map((item, index) => (<>
-              <li key={index}>{ item.title }</li>
-            </>))
-          }
-        </div>
-      </div>
+      </Router>
     </>);
   }
 }

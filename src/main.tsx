@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import core from "./core/index";
+import "./App.css";
 
 const App = () => core.render();
 
